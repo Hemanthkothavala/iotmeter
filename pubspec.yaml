@@ -1,0 +1,38 @@
+name: energy
+description: "A new Flutter project."
+
+publish_to: "none" # This prevents publishing to pub.dev.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # HTTP package for API calls
+  http: ^1.2.0
+  # Cupertino icons for iOS-style icons
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Linting package for better code practices
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Add assets here if needed
+  # assets:
+  #   - images/logo.png
+
+  # Add custom fonts here if needed
+  # fonts:
+  #   - family: CustomFont
+  #     fonts:
+  #       - asset: fonts/CustomFont-Regular.ttf
