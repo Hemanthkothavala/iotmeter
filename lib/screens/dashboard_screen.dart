@@ -86,21 +86,29 @@ class _DashboardScreenState extends State<DashboardScreen>
         if (data != null) {
           double meter0 = _extractNumericValue(data['meter0']?['power']);
 
-          if (meter0 != _energyConsumption0) {
-            _lastUpdateTime = DateTime.now();
-            setState(() {
+          setState(() {
+            if (meter0 != _energyConsumption0) {
+              _lastUpdateTime = DateTime.now();
               _deviceOnline = true;
               _energyConsumption0 = meter0;
               _theftStatus =
                   meter0 > 100 ? "❌ Theft Detected" : "✅ No Theft Detected";
-            });
-          }
+            }
+          });
         }
       } else {
         print("Error: ${response.statusCode} - ${response.body}");
       }
     } catch (e) {
       print("Failed to fetch data: $e");
+    }
+
+    // Check if data is outdated
+    if (DateTime.now().difference(_lastUpdateTime).inSeconds > 60) {
+      setState(() {
+        _deviceOnline = false; // Mark as Offline if no updates for 10 seconds
+        _theftStatus = "⚠️ Unable to Determine";
+      });
     }
   }
 
@@ -152,7 +160,7 @@ class _DashboardScreenState extends State<DashboardScreen>
               const SizedBox(height: 30),
 
               _buildAnimatedCard(
-                title: 'Meter 1 Power Consumption',
+                title: 'Power Consumption',
                 value: '${_energyConsumption0.toStringAsFixed(2)} W',
                 icon: Icons.electrical_services,
                 color: Colors.orangeAccent,
@@ -163,7 +171,7 @@ class _DashboardScreenState extends State<DashboardScreen>
 
               _buildAnimatedCard(
                 title: 'Theft Status',
-                value: _theftStatus,
+                value: _deviceOnline == null ? '⚠️ Unable to Determine' : _theftStatus,
                 icon: Icons.warning_amber,
                 color:
                     _theftStatus.contains('❌')
